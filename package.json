@@ -13,6 +13,7 @@
     "@types/node": "^24.10.0"
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "uuid": "^13.0.0"
   }
 }
