@@ -18,14 +18,14 @@ async function getUserById(
 ) {
   const userId = req.params?.userId!;
   if (!isValidUUIDv4(userId)) {
-    res.statusCode = 400;
-    return res.end("Invalid JSON");
+    throw new HttpError(400, "Invalid JSON");
   }
 
-  const user = users.find((item) => item.id === userId);
+  const user = users.find((item) => {
+    return item.id === userId;
+  });
   if (user === undefined) {
-    res.statusCode = 404;
-    return res.end("User does not exist");
+    throw new HttpError(404, "User does not exist");
   }
 
   res.statusCode = 200;
@@ -42,8 +42,7 @@ async function createNewUser(
     req.body as any as { username: string; age: number; hobbies: string[] }
   );
   if (!newUser.id || !newUser.username || !newUser.age || !newUser.hobbies) {
-    res.statusCode = 400;
-    return res.end("Missing required fields");
+    throw new HttpError(400, "Missing required fields");
   }
 
   users.push(newUser);
@@ -58,14 +57,14 @@ async function editUserById(
 ) {
   const userId = req.params?.userId!;
   if (!isValidUUIDv4(userId)) {
-    res.statusCode = 400;
-    return res.end("Invalid JSON");
+    throw new HttpError(400, "Invalid JSON");
   }
 
-  const userToUpdate = users.find((item) => item.id === userId);
+  const userToUpdate = users.find((item) => {
+    return item.id === userId;
+  });
   if (userToUpdate === undefined) {
-    res.statusCode = 404;
-    return res.end("User does not exist");
+    throw new HttpError(404, "User does not exist");
   }
 
   const updatedUser = Object.assign(
@@ -81,9 +80,40 @@ async function editUserById(
   return res.end(JSON.stringify(updatedUser));
 }
 
+// ******** delete user by id ********
+async function deleteUserById(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+) {
+  const userId = req.params?.userId!;
+  if (!isValidUUIDv4(userId)) {
+    throw new HttpError(400, "Invalid JSON");
+  }
+
+  const userIndexToDelete = users.findIndex((item) => {
+    return item.id === userId;
+  });
+  if (userIndexToDelete === undefined) {
+    throw new HttpError(404, "User does not exist");
+  }
+
+  if (userIndexToDelete !== 1) {
+    users.splice(userIndexToDelete, 1);
+    res.statusCode = 204;
+    return res.end();
+  }
+}
+
 // ******** endpoint not found ********
 function endpointNotFound(req: http.IncomingMessage, res: http.ServerResponse) {
   throw new HttpError(404, "Resource not found");
 }
 
-export { createNewUser, getUsers, getUserById, editUserById, endpointNotFound };
+export {
+  createNewUser,
+  deleteUserById,
+  getUsers,
+  getUserById,
+  editUserById,
+  endpointNotFound,
+};

@@ -24,6 +24,12 @@ async function usersController(
     req.params = { userId };
     return await usersService.editUserById(req, res);
   }
+
+  if (req.method === "DELETE" && req.url?.startsWith("/api/users/")) {
+    const userId = req.url.split("/")[3];
+    req.params = { userId };
+    return await usersService.deleteUserById(req, res);
+  }
 }
 
 export { usersController };
