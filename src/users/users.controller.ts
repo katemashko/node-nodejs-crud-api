@@ -15,8 +15,14 @@ async function usersController(
     return await usersService.getUserById(req, res);
   }
 
-  if (req.method === "POST" && req.url === "/api/users/") {
+  if (req.method === "POST" && req.url === "/api/users") {
     return await usersService.createNewUser(req, res);
+  }
+
+  if (req.method === "PUT" && req.url?.startsWith("/api/users/")) {
+    const userId = req.url.split("/")[3];
+    req.params = { userId };
+    return await usersService.editUserById(req, res);
   }
 }
 

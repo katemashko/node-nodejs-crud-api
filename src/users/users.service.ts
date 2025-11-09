@@ -51,9 +51,39 @@ async function createNewUser(
   return res.end(JSON.stringify(newUser));
 }
 
+// ******** edit user by id ********
+async function editUserById(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+) {
+  const userId = req.params?.userId!;
+  if (!isValidUUIDv4(userId)) {
+    res.statusCode = 400;
+    return res.end("Invalid JSON");
+  }
+
+  const userToUpdate = users.find((item) => item.id === userId);
+  if (userToUpdate === undefined) {
+    res.statusCode = 404;
+    return res.end("User does not exist");
+  }
+
+  const updatedUser = Object.assign(
+    userToUpdate,
+    req.body as any as {
+      username: string;
+      age: number;
+      hobbies: string[];
+    }
+  );
+
+  res.statusCode = 200;
+  return res.end(JSON.stringify(updatedUser));
+}
+
 // ******** endpoint not found ********
 function endpointNotFound(req: http.IncomingMessage, res: http.ServerResponse) {
   throw new HttpError(404, "Resource not found");
 }
 
-export { createNewUser, getUsers, getUserById, endpointNotFound };
+export { createNewUser, getUsers, getUserById, editUserById, endpointNotFound };
