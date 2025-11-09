@@ -87,21 +87,19 @@ async function deleteUserById(
 ) {
   const userId = req.params?.userId!;
   if (!isValidUUIDv4(userId)) {
-    throw new HttpError(400, "Invalid JSON");
+    throw new HttpError(400, "UserId is invalid");
   }
 
   const userIndexToDelete = users.findIndex((item) => {
     return item.id === userId;
   });
-  if (userIndexToDelete === undefined) {
+  if (userIndexToDelete === -1) {
     throw new HttpError(404, "User does not exist");
   }
 
-  if (userIndexToDelete !== 1) {
-    users.splice(userIndexToDelete, 1);
-    res.statusCode = 204;
-    return res.end();
-  }
+  users.splice(userIndexToDelete, 1);
+  res.statusCode = 204;
+  return res.end();
 }
 
 // ******** endpoint not found ********
