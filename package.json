@@ -7,14 +7,16 @@
   "author": "Katsiaryna Mashko",
   "main": "src/main.ts",
   "scripts": {
-    "start": "ts-node src/main.ts"
+    "start:dev": "ts-node-dev src/main.ts",
+    "start:prod": "npx tsc & node dist/main.js"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0"
+    "@types/node": "^24.10.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
-    "ts-node": "^10.9.2",
     "uuid": "^13.0.0"
   }
 }

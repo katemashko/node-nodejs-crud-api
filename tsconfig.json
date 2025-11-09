@@ -4,6 +4,7 @@
     "target": "es2021",
     "sourceMap": true,
     "declaration": true,
+    "outDir": "./dist",
     "removeComments": true,
     "baseUrl": "./",
     "noImplicitAny": false,
