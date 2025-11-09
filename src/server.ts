@@ -32,6 +32,5 @@ declare module "http" {
   interface IncomingMessage {
     params?: { [key: string]: string };
     body?: { [key: string]: string };
-    userId: string;
   }
 }
