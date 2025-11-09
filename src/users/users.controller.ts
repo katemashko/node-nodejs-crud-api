@@ -14,6 +14,10 @@ async function usersController(
     req.params = { userId };
     return await usersService.getUserById(req, res);
   }
+
+  if (req.method === "POST" && req.url === "/api/users/") {
+    return await usersService.createNewUser(req, res);
+  }
 }
 
 export { usersController };

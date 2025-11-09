@@ -32,9 +32,28 @@ async function getUserById(
   return res.end(JSON.stringify(user));
 }
 
+// ******** create new user ********
+async function createNewUser(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+) {
+  const newUser = Object.assign(
+    { id: uuidv4() },
+    req.body as any as { username: string; age: number; hobbies: string[] }
+  );
+  if (!newUser.id || !newUser.username || !newUser.age || !newUser.hobbies) {
+    res.statusCode = 400;
+    return res.end("Missing required fields");
+  }
+
+  users.push(newUser);
+  res.statusCode = 201;
+  return res.end(JSON.stringify(newUser));
+}
+
 // ******** endpoint not found ********
 function endpointNotFound(req: http.IncomingMessage, res: http.ServerResponse) {
   throw new HttpError(404, "Resource not found");
 }
 
-export { getUsers, getUserById, endpointNotFound };
+export { createNewUser, getUsers, getUserById, endpointNotFound };
