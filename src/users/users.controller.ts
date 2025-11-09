@@ -8,6 +8,12 @@ async function usersController(
   if (req.method === "GET" && req.url === "/api/users") {
     return await usersService.getUsers(req, res);
   }
+
+  if (req.method === "GET" && req.url?.startsWith("/api/users/")) {
+    const userId = req.url.split("/")[3];
+    req.params = { userId };
+    return await usersService.getUserById(req, res);
+  }
 }
 
 export { usersController };

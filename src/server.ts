@@ -1,7 +1,8 @@
 import * as http from "node:http";
 import { parseBody } from "./utils/parse-body";
 import { HttpError } from "./http-error";
-import { usersController } from "./users/users-controller";
+import { usersController } from "./users/users.controller";
+import { endpointNotFound } from "./users/users.service";
 
 export const server = http.createServer(async (req, res) => {
   try {
@@ -14,6 +15,8 @@ export const server = http.createServer(async (req, res) => {
     if (req.url?.startsWith("/api/users")) {
       return await usersController(req, res);
     }
+
+    endpointNotFound(req, res);
   } catch (error) {
     if (error instanceof HttpError) {
       res.statusCode = error.statusCode;

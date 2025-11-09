@@ -1,3 +1,4 @@
+import { error } from "node:console";
 import * as http from "node:http";
 
 function parseBody(req: http.IncomingMessage) {
@@ -13,6 +14,9 @@ function parseBody(req: http.IncomingMessage) {
           reject(error);
         }
       });
+      req.on("error", (error) => reject(error));
+    } else {
+      resolve(null);
     }
   });
 }

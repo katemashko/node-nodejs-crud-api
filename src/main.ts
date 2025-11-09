@@ -1,5 +1,4 @@
 import "dotenv/config";
-
 import { server } from "./server";
 import { PORT } from "./config";
 
