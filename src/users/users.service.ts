@@ -18,7 +18,7 @@ async function getUserById(
 ) {
   const userId = req.params?.userId!;
   if (!isValidUUIDv4(userId)) {
-    throw new HttpError(400, "Invalid JSON");
+    throw new HttpError(400, "UserId is invalid");
   }
 
   const user = users.find((item) => {
@@ -41,8 +41,20 @@ async function createNewUser(
     { id: uuidv4() },
     req.body as any as { username: string; age: number; hobbies: string[] }
   );
-  if (!newUser.id || !newUser.username || !newUser.age || !newUser.hobbies) {
+  if (!newUser.username || !newUser.age || !newUser.hobbies) {
     throw new HttpError(400, "Missing required fields");
+  }
+
+  if (typeof newUser.username !== "string") {
+    throw new HttpError(400, "Username is not String");
+  }
+
+  if (typeof newUser.age !== "number") {
+    throw new HttpError(400, "Age is not Number");
+  }
+
+  if (!Array.isArray(newUser.hobbies)) {
+    throw new HttpError(400, "Hobbies is not Array");
   }
 
   users.push(newUser);
@@ -57,7 +69,7 @@ async function editUserById(
 ) {
   const userId = req.params?.userId!;
   if (!isValidUUIDv4(userId)) {
-    throw new HttpError(400, "Invalid JSON");
+    throw new HttpError(400, "UserId is invalid");
   }
 
   const userToUpdate = users.find((item) => {
@@ -65,6 +77,24 @@ async function editUserById(
   });
   if (userToUpdate === undefined) {
     throw new HttpError(404, "User does not exist");
+  }
+
+  const fieldsToUpdate = req.body as any as {
+    username: string;
+    age: number;
+    hobbies: string[];
+  };
+
+  if (typeof fieldsToUpdate.username !== "string") {
+    throw new HttpError(400, "Username is not String");
+  }
+
+  if (typeof fieldsToUpdate.age !== "number") {
+    throw new HttpError(400, "Age is not Number");
+  }
+
+  if (!Array.isArray(fieldsToUpdate.hobbies)) {
+    throw new HttpError(400, "Hobbies is not Array");
   }
 
   const updatedUser = Object.assign(
