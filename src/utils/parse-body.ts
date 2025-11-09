@@ -5,7 +5,7 @@ function parseBody(req: http.IncomingMessage) {
     if (req.headers["content-type"] === "application/json") {
       let body = "";
 
-      req.on("data", (chunk) => (body += chunk.toSting()));
+      req.on("data", (chunk) => (body += chunk.toString()));
       req.on("end", () => {
         try {
           resolve(JSON.parse(body));
